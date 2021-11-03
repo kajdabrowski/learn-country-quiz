@@ -21,7 +21,7 @@ const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvxyz', 5)
 const firebaseConfig = {
   apiKey: "AIzaSyAvraf5s5RDgCPkjh63-hFgi10j11fiPxM",
   authDomain: "country-quiz-dc997.firebaseapp.com",
-  databaseURL: "https://country-quiz-dc997-default-rtdb.europe-west1.firebasedatabase.app",
+  databaseURL: "https://learn-country-quiz-f159d-default-rtdb.europe-west1.firebasedatabase.app/", //Ändrade till gruppens db
   projectId: "country-quiz-dc997",
   storageBucket: "country-quiz-dc997.appspot.com",
   messagingSenderId: "9659259197",
@@ -34,6 +34,8 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
 const db = getDatabase(app);
+console.log(db);
+
 
 
 function App() {
