@@ -22,11 +22,14 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: dist
-          path: dist
+          path: app/dist
   deploy:
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
+    defaults: 
+      run:
+        working-directory: ./app
     steps:
       - name: Checkout Repo
         uses: actions/checkout@main
@@ -34,7 +37,7 @@ jobs:
         uses: actions/download-artifact@main
         with:
           name: dist
-          path: dist
+          path: app/dist
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
