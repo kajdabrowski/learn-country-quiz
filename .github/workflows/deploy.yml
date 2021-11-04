@@ -17,6 +17,6 @@ jobs:
               with:
                   entryPoint: ./app
                   repoToken: "${{ secrets.GITHUB_TOKEN }}"
-                  firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEARN_COUNTRY_QUIZ_9A68D }}"
+                  firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEARN_COUNTRY_QUIZ_F159D }}"
                   channelId: live
                   projectId: learn-country-quiz-f159d
