@@ -13,6 +13,9 @@ import { initializeApp } from "firebase/app"
 import { getAnalytics } from "firebase/analytics"
 import { ref, getDatabase, set, update } from "firebase/database"
 import { useObject } from 'react-firebase-hooks/database'
+import initFeatures from "./featureFlags"
+
+
 
 const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvxyz', 5)
 
@@ -58,8 +61,11 @@ console.log(db);
 
 
 
-function App() {
 
+
+
+function App() {
+	initFeatures();
 	return (
 		<div className="app">
 			<div className="header">THE FLAG GAME</div>
@@ -76,9 +82,12 @@ function App() {
 			<div className="footer"></div>
 		</div>
 	);
+
+	
 }
 
 const StartPage = () => {
+	
 	const [snapshot, loading, error] = useObject(ref(db, 'nextGame'))
 	const [location, setLocation] = useLocation();
 
@@ -93,6 +102,7 @@ const StartPage = () => {
 			updates['/nextGame'] = gameId
 			await update(ref(db), updates)
 			setLocation(`/game/${gameId}/1`)
+			
 		}
 		else {
 			const game = utils.createGame()
