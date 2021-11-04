@@ -18,16 +18,36 @@ const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvxyz', 5)
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// const firebaseConfig = {
+//   apiKey: "AIzaSyAvraf5s5RDgCPkjh63-hFgi10j11fiPxM",
+//   authDomain: "country-quiz-dc997.firebaseapp.com",
+//   databaseURL: "https://learn-country-quiz-f159d-default-rtdb.europe-west1.firebasedatabase.app/", //Ändrade till gruppens db
+//   projectId: "country-quiz-dc997",
+//   storageBucket: "country-quiz-dc997.appspot.com",
+//   messagingSenderId: "9659259197",
+//   appId: "1:9659259197:web:101698eeac61dd64ea4d54",
+//   measurementId: "G-SM2WHHKWFM"
+// };
+
+//NYTT
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAvraf5s5RDgCPkjh63-hFgi10j11fiPxM",
-  authDomain: "country-quiz-dc997.firebaseapp.com",
-  databaseURL: "https://learn-country-quiz-f159d-default-rtdb.europe-west1.firebasedatabase.app/", //Ändrade till gruppens db
-  projectId: "country-quiz-dc997",
-  storageBucket: "country-quiz-dc997.appspot.com",
-  messagingSenderId: "9659259197",
-  appId: "1:9659259197:web:101698eeac61dd64ea4d54",
-  measurementId: "G-SM2WHHKWFM"
+  apiKey: "AIzaSyBzcyHqbezZz4SN4YQTnOAbrCcgkSOCaNw",
+  authDomain: "learn-country-quiz-f159d.firebaseapp.com",
+  databaseURL: "https://learn-country-quiz-f159d-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "learn-country-quiz-f159d",
+  storageBucket: "learn-country-quiz-f159d.appspot.com",
+  messagingSenderId: "76349734788",
+  appId: "1:76349734788:web:ebcbd6f5590e94d853e7d1"
 };
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
