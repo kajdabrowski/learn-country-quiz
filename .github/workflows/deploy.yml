@@ -13,5 +13,7 @@ jobs:
       - name: Install, Build 🔧 and Deploy 🚀
         run: |
           npm ci
+          npm run build:prod --if-present
+          npm install firebase-tools
           npm run deploy
         working-directory: app
