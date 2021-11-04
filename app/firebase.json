@@ -3,6 +3,7 @@
     "rules": "database.rules.json"
   },
   "hosting": {
+    "site": "learn-country-quiz-f159d",
     "public": "dist",
     "ignore": [
       "firebase.json",
