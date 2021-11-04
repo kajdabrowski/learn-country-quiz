@@ -221,10 +221,12 @@ const QuestionPage = ({gameId, playerId}) => {
 					if (question.fastest && question.fastest.answer == countryCode) {
 						correct = question.fastest.answer === question.correct
 						if (question.fastest.player === playerId) {
-							youOrOpponent = `YOU ${correct ? ' +1' : ''}`
+							//la till -1 i slutet av ternary
+							youOrOpponent = `YOU ${correct ? ' +1' : ' -1'}`
 						}
 						else {
-							youOrOpponent = `OPPONENT ${correct ? ' +1' : ''}`
+							//la till -1 i slutet av ternary
+							youOrOpponent = `OPPONENT ${correct ? ' +1' : ' -1'}`
 						}
 					}
 					return (
