@@ -1,19 +1,22 @@
-name: Build and Deploy
-on:
-  push:
-    branches:
-      - main
+name: Deploy to Firebase Hosting on merge
+"on":
+    push:
+        branches:
+            - main
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v2.3.1
-
-      - name: Install, Build 🔧 and Deploy 🚀
-        run: |
-          npm ci
-          npm run build:prod --if-present
-          npm install firebase-tools
-          npm run deploy
-        working-directory: app
+    build_and_deploy:
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: ./app
+        steps:
+            - uses: actions/checkout@v2
+            - run: npm ci
+            - run: npm run build:prod
+            - uses: FirebaseExtended/action-hosting-deploy@v0
+              with:
+                  entryPoint: ./app
+                  repoToken: "${{ secrets.GITHUB_TOKEN }}"
+                  firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEARN_COUNTRY_QUIZ_9A68D }}"
+                  channelId: live
+                  projectId: learn-country-quiz-f159d
