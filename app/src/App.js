@@ -9,6 +9,7 @@ import winning from '../assets/winning.png'
 import dog from '../assets/dog.png'
 
 // Import the functions you need from the SDKs you need
+// https://firebase.google.com/docs/web/setup#available-libraries
 import { initializeApp } from "firebase/app"
 import { getAnalytics } from "firebase/analytics"
 import { ref, getDatabase, set, update } from "firebase/database"
@@ -16,27 +17,7 @@ import { useObject } from 'react-firebase-hooks/database'
 import initFeatures from "./featureFlags"
 
 
-
 const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvxyz', 5)
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-// const firebaseConfig = {
-//   apiKey: "AIzaSyAvraf5s5RDgCPkjh63-hFgi10j11fiPxM",
-//   authDomain: "country-quiz-dc997.firebaseapp.com",
-//   databaseURL: "https://learn-country-quiz-f159d-default-rtdb.europe-west1.firebasedatabase.app/", //Ändrade till gruppens db
-//   projectId: "country-quiz-dc997",
-//   storageBucket: "country-quiz-dc997.appspot.com",
-//   messagingSenderId: "9659259197",
-//   appId: "1:9659259197:web:101698eeac61dd64ea4d54",
-//   measurementId: "G-SM2WHHKWFM"
-// };
-
-//NYTT
-// Import the functions you need from the SDKs you need
-// import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -50,19 +31,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-
 const db = getDatabase(app);
-console.log(db);
-
-
-
-
-
 
 function App() {
 	initFeatures();
@@ -82,18 +53,15 @@ function App() {
 			<div className="footer"></div>
 		</div>
 	);
-
-	
 }
 
+
 const StartPage = () => {
-	
 	const [snapshot, loading, error] = useObject(ref(db, 'nextGame'))
 	const [location, setLocation] = useLocation();
 
 	if (loading) return <div className="fw6 fs5">Loading...</div>
 	const nextGame = snapshot.val()
-
 
 	const play = async () => {
 		if (R.isNil(nextGame)) {
@@ -102,8 +70,8 @@ const StartPage = () => {
 			updates['/nextGame'] = gameId
 			await update(ref(db), updates)
 			setLocation(`/game/${gameId}/1`)
-			
 		}
+
 		else {
 			const game = utils.createGame()
 			const updates = {}
@@ -118,6 +86,7 @@ const StartPage = () => {
 			await update(ref(db), updates2)
 		}
 	}
+
 	return (
 		<div className="page">
 			<div className="st-flags">
@@ -145,6 +114,7 @@ const StartPage = () => {
 		</div>
 	)
 }
+
 
 const GamePage = ({gameId, playerId}) => {
 	const [snapshot, loading, error] = useObject(ref(db, `games/${gameId}`))
@@ -192,13 +162,18 @@ const QuestionPage = ({gameId, playerId}) => {
 
 		const updates = {}
 		updates[`/games/${gameId}/questions/${game.currentQuestion}/fastest`] = {player: playerId, answer: countryCode}
-		if (countryCode == question.correct) {
-			//ändra här
-			updates[`/games/${gameId}/score/${youKey}`] = game.score[youKey] + 1
+		if (JSON.parse(localStorage.getItem("featureFlags"))[0]["active"] === true) {
+			if (countryCode == question.correct) {
+				updates[`/games/${gameId}/score/${youKey}`] = game.score[youKey] + 1
+			}
+			else {
+				updates[`/games/${gameId}/score/${youKey}`] = game.score[youKey] - 1
+			}
 		}
 		else {
-			updates[`/games/${gameId}/score/${youKey}`] = game.score[youKey] - 1
-			
+			if (countryCode == question.correct) {
+				updates[`/games/${gameId}/score/${youKey}`] = game.score[youKey] + 1
+			}
 		}
 		
 		await update(ref(db), updates)
