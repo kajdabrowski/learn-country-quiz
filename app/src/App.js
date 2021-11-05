@@ -193,8 +193,14 @@ const QuestionPage = ({gameId, playerId}) => {
 		const updates = {}
 		updates[`/games/${gameId}/questions/${game.currentQuestion}/fastest`] = {player: playerId, answer: countryCode}
 		if (countryCode == question.correct) {
+			//ändra här
 			updates[`/games/${gameId}/score/${youKey}`] = game.score[youKey] + 1
 		}
+		else {
+			updates[`/games/${gameId}/score/${youKey}`] = game.score[youKey] - 1
+			
+		}
+		
 		await update(ref(db), updates)
 
 		if (game.currentQuestion < Object.values(game.questions).length) {
@@ -220,13 +226,11 @@ const QuestionPage = ({gameId, playerId}) => {
 					let youOrOpponent = false
 					if (question.fastest && question.fastest.answer == countryCode) {
 						correct = question.fastest.answer === question.correct
-						if (question.fastest.player === playerId) {
-							//la till -1 i slutet av ternary
-							youOrOpponent = `YOU ${correct ? ' +1' : ' -1'}`
+						if (question.fastest.player === playerId && JSON.parse(localStorage.getItem("featureFlags"))[0]["active"] === true) {
+							youOrOpponent = `YOU ${correct ? ' +1' : '-1'}`
 						}
 						else {
-							//la till -1 i slutet av ternary
-							youOrOpponent = `OPPONENT ${correct ? ' +1' : ' -1'}`
+							youOrOpponent = `OPPONENT ${correct ? ' +1' : ''}`
 						}
 					}
 					return (
@@ -249,7 +253,7 @@ const QuestionPage = ({gameId, playerId}) => {
 const QuickResults = ({you, opponent}) => {
 	return (
 		<div className="quick-results">
-			YOU {you} - {opponent} OPPONENT
+			YOU {you} : OPPONENT {opponent}
 		</div>
 	)
 }
