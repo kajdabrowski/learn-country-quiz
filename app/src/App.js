@@ -90,25 +90,88 @@ const StartPage = () => {
 	return (
 		<div className="page">
 			<div className="st-flags">
+				<div className="f32"><div className={`flag afg`}></div></div>
+				<div className="f32"><div className={`flag alb`}></div></div>
+				<div className="f32"><div className={`flag dza`}></div></div>
+				<div className="f32"><div className={`flag usa`}></div></div>
+				<div className="f32"><div className={`flag and`}></div></div>
+				<div className="f32"><div className={`flag ago`}></div></div>
+				<div className="f32"><div className={`flag atg`}></div></div>
+				<div className="f32"><div className={`flag arg`}></div></div>
+				<div className="f32"><div className={`flag arm`}></div></div>
+				<div className="f32"><div className={`flag abw`}></div></div>
+				<div className="f32"><div className={`flag aus`}></div></div>
+				<div className="f32"><div className={`flag aut`}></div></div>
 				<div className="f32"><div className={`flag aze`}></div></div>
-				<div className="f32"><div className={`flag bih`}></div></div>
-				<div className="f32"><div className={`flag brb`}></div></div>
-				<div className="f32"><div className={`flag swe`}></div></div>
-				<div className="f32"><div className={`flag bgd`}></div></div>
-				<div className="f32"><div className={`flag bel`}></div></div>
-				<div className="f32"><div className={`flag bfa`}></div></div>
-				<div className="f32"><div className={`flag bgr`}></div></div>
+				<div className="f32"><div className={`flag bhs`}></div></div>
 				<div className="f32"><div className={`flag bhr`}></div></div>
-				<div className="f32"><div className={`flag bdi`}></div></div>
+				<div className="f32"><div className={`flag gbr`}></div></div>
+				<div className="f32"><div className={`flag brb`}></div></div>
+				<div className="f32"><div className={`flag blr`}></div></div>
+				<div className="f32"><div className={`flag blz`}></div></div>
+
 				<div className="f32"><div className={`flag ben`}></div></div>
 				<div className="f32"><div className={`flag bmu`}></div></div>
-				<div className="f32"><div className={`flag brn`}></div></div>
-				<div className="f32"><div className={`flag bol`}></div></div>
-				<div className="f32"><div className={`flag bra`}></div></div>
-				<div className="f32"><div className={`flag bhs`}></div></div>
 				<div className="f32"><div className={`flag btn`}></div></div>
-				<div className="f32"><div className={`flag fra`}></div></div>
+				<div className="f32"><div className={`flag bol`}></div></div>
+				<div className="f32"><div className={`flag bih`}></div></div>
 				<div className="f32"><div className={`flag bwa`}></div></div>
+				<div className="f32"><div className={`flag bra`}></div></div>
+				<div className="f32"><div className={`flag vgb`}></div></div>
+				<div className="f32"><div className={`flag brn`}></div></div>
+				<div className="f32"><div className={`flag bgr`}></div></div>
+				<div className="f32"><div className={`flag bfa`}></div></div>
+				<div className="f32"><div className={`flag bdi`}></div></div>
+				<div className="f32"><div className={`flag cpv`}></div></div>
+				<div className="f32"><div className={`flag khm`}></div></div>
+				<div className="f32"><div className={`flag cmr`}></div></div>
+				<div className="f32"><div className={`flag can`}></div></div>
+				<div className="f32"><div className={`flag cym`}></div></div>
+				<div className="f32"><div className={`flag nor`}></div></div>
+				<div className="f32"><div className={`flag tcd`}></div></div>
+
+				<div className="f32"><div className={`flag pol`}></div></div>
+				<div className="f32"><div className={`flag chl`}></div></div>
+				<div className="f32"><div className={`flag chn`}></div></div>
+				<div className="f32"><div className={`flag col`}></div></div>
+				<div className="f32"><div className={`flag com`}></div></div>
+				<div className="f32"><div className={`flag cod`}></div></div>
+				<div className="f32"><div className={`flag cog`}></div></div>
+				<div className="f32"><div className={`flag cri`}></div></div>
+				<div className="f32"><div className={`flag civ`}></div></div>
+				<div className="f32"><div className={`flag hrv`}></div></div>
+				<div className="f32"><div className={`flag cub`}></div></div>
+				<div className="f32"><div className={`flag cuw`}></div></div>
+				<div className="f32"><div className={`flag cyp`}></div></div>
+				<div className="f32"><div className={`flag cze`}></div></div>
+				<div className="f32"><div className={`flag dnk`}></div></div>
+				<div className="f32"><div className={`flag dji`}></div></div>
+				<div className="f32"><div className={`flag dma`}></div></div>
+				<div className="f32"><div className={`flag esp`}></div></div>
+				<div className="f32"><div className={`flag ecu`}></div></div>
+
+				<div className="f32"><div className={`flag egy`}></div></div>
+				<div className="f32"><div className={`flag slv`}></div></div>
+				<div className="f32"><div className={`flag gnq`}></div></div>
+				<div className="f32"><div className={`flag eri`}></div></div>
+				<div className="f32"><div className={`flag est`}></div></div>
+				<div className="f32"><div className={`flag eth`}></div></div>
+				<div className="f32"><div className={`flag fro`}></div></div>
+				<div className="f32"><div className={`flag fji`}></div></div>
+				<div className="f32"><div className={`flag fin`}></div></div>
+				<div className="f32"><div className={`flag fra`}></div></div>
+				<div className="f32"><div className={`flag pyf`}></div></div>
+				<div className="f32"><div className={`flag gab`}></div></div>
+				<div className="f32"><div className={`flag gmb`}></div></div>
+				<div className="f32"><div className={`flag geo`}></div></div>
+				<div className="f32"><div className={`flag deu`}></div></div>
+				<div className="f32"><div className={`flag gha`}></div></div>
+				<div className="f32"><div className={`flag gib`}></div></div>
+				<div className="f32"><div className={`flag grc`}></div></div>
+				<div className="f32"><div className={`flag grl`}></div></div>
+
+				<div className="f32"><div className={`flag gum`}></div></div>
+				<div className="f32"><div className={`flag gtm`}></div></div>
 			</div>
 			<div className="button btn-square" onClick={play}>Play</div>
 		</div>
@@ -274,10 +337,3 @@ const Lost = ({you, opponent}) => {
 }
 
 export default App;
-
-
-
-
-
-
-
