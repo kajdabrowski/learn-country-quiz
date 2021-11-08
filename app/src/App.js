@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import * as R from 'ramda'
 import { Link, Route, useLocation } from "wouter"
 import { customAlphabet } from 'nanoid'
@@ -17,8 +17,6 @@ import { ref, getDatabase, set, update } from "firebase/database"
 import { useObject } from 'react-firebase-hooks/database'
 import initFeatures from "./featureFlags"
 
-
-
 const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvxyz', 5)
 
 // Your web app's Firebase configuration
@@ -30,15 +28,15 @@ const firebaseConfig = {
 	storageBucket: "learn-country-quiz-f159d.appspot.com",
 	messagingSenderId: "76349734788",
 	appId: "1:76349734788:web:ebcbd6f5590e94d853e7d1"
-};
+}
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const db = getDatabase(app);
+const app = initializeApp(firebaseConfig)
+const analytics = getAnalytics(app)
+const db = getDatabase(app)
 
 function App() {
-	initFeatures();
+	initFeatures()
 	return (
 		<div className="app">
 			<div className="header">THE FLAG GAME</div>
@@ -58,98 +56,111 @@ function App() {
 			</div>
 			<div className="footer"></div>
 		</div>
-	);
+	)
 }
 
-// setup page
+// Setup Page
 const SetupPage = () => {
-	
 	const [featureFlags, setfeatureFlags]  = useLocalStorage("featureFlags", [])
-	console.log(featureFlags)
+
 	function toggleScore(){
 		const newFeatureFlags = [...featureFlags]
-		console.log(newFeatureFlags)
-		newFeatureFlags[0].active = true
+		newFeatureFlags[0].active = !newFeatureFlags[0].active
 		setfeatureFlags(newFeatureFlags)
 	}
 
 	function toggleRandom(){
 		const newFeatureFlags = [...featureFlags]
-		console.log(newFeatureFlags)
-		newFeatureFlags[1].active = true
+		newFeatureFlags[1].active = !newFeatureFlags[1].active
 		setfeatureFlags(newFeatureFlags)
 	}
 
 	function toggleTie(){
 		const newFeatureFlags = [...featureFlags]
-		console.log(newFeatureFlags)
-		newFeatureFlags[2].active = true
+		newFeatureFlags[2].active = !newFeatureFlags[2].active
 		setfeatureFlags(newFeatureFlags)
 	}
 
-
-
 	return (
 		<div className="page">
-			<button onClick={toggleScore} type="button" className="ffbutton">Improved Scoring  </button>
-			{JSON.stringify(featureFlags[0].active)}
-				
-			<button onClick={toggleRandom} type="button" className="ffbutton">Randomizer</button>
-			 {JSON.stringify(featureFlags[1].active)}
+			<center><h3>Feature Flags Settings
+			<br></br>Please take caution when using these experimental features</h3></center>
 
-			<button onClick={toggleTie} type="button" className="ffbutton">Tie Screen</button>
-			 {JSON.stringify(featureFlags[2].active)}
+			<div>
+				<center>
+					<button onClick={toggleScore} type="button" className="ffbutton">Toggle Improved Scoring</button>
+					<p>Status: {JSON.stringify(featureFlags[0].active)}</p>
+				</center>
+			</div>
 
-			<Link href="/" className="re-home link">Go to App</Link>
+			<div>
+				<center>
+					<button onClick={toggleRandom} type="button" className="ffbutton">Toggle Improved Randomizer</button>
+					<p>Status: {JSON.stringify(featureFlags[1].active)}</p>
+				</center>
+			</div>
+
+			<div>
+				<center>
+					<button onClick={toggleTie} type="button" className="ffbutton">Toggle Improved Ties</button>
+					<p>Status: {JSON.stringify(featureFlags[2].active)}</p>
+				</center>
+			</div>
+
+			<Link href="/" className="re-home link">Go to App!</Link>
 		</div>
 	)
-
 }
 
 
-// Hook
+// Hooks
 function useLocalStorage(key, initialValue) {
 	// State to store our value
 	// Pass initial state function to useState so logic is only executed once
 	const [storedValue, setStoredValue] = useState(() => {
-	  try {
+	try {
 		// Get from local storage by key
-		const item = window.localStorage.getItem(key);
+		const item = window.localStorage.getItem(key)
+
 		// Parse stored json or if none return initialValue
-		return item ? JSON.parse(item) : initialValue;
-	  } catch (error) {
+		return item ? JSON.parse(item) : initialValue
+	}
+
+	catch (error) {
 		// If error also return initialValue
-		console.log(error);
-		return initialValue;
-	  }
-	});
+		console.log(error)
+		return initialValue
+	}
+})
+
 	// Return a wrapped version of useState's setter function that ...
 	// ... persists the new value to localStorage.
 	const setValue = (value) => {
-	  try {
+	try {
 		// Allow value to be a function so we have same API as useState
-		const valueToStore =
-		  value instanceof Function ? value(storedValue) : value;
+		const valueToStore = value instanceof Function ? value(storedValue) : value
+
 		// Save state
-		setStoredValue(valueToStore);
+		setStoredValue(valueToStore)
+
 		// Save to local storage
-		window.localStorage.setItem(key, JSON.stringify(valueToStore));
-	  } catch (error) {
-		// A more advanced implementation would handle the error case
-		console.log(error);
+		window.localStorage.setItem(key, JSON.stringify(valueToStore))
 	  }
-	};
-	return [storedValue, setValue];
-  }
+	  
+	catch (error) {
+		// A more advanced implementation would handle the error case
+		console.log(error)
+	  }
+	}
+
+	return [storedValue, setValue]
+}
 
 
-
-
-
-
+// Start Page
 const StartPage = () => {
 	const [snapshot, loading, error] = useObject(ref(db, 'nextGame'))
-	const [location, setLocation] = useLocation();
+	const [location, setLocation] = useLocation()
 
 	if (loading) return <div className="fw6 fs5">Loading...</div>
 	const nextGame = snapshot.val()
@@ -186,7 +197,7 @@ const StartPage = () => {
 
 		const flags = []
 		for (let loop = 0; loop <= 77; loop++) {
-			let RNG = Math.floor(Math.random() * 200);
+			let RNG = Math.floor(Math.random() * 200)
 			flags.push(Object.values(country)[RNG])
 		}
 
@@ -307,10 +318,10 @@ const StartPage = () => {
 	}
 }
 
-
+// Game Page
 const GamePage = ({ gameId, playerId }) => {
 	const [snapshot, loading, error] = useObject(ref(db, `games/${gameId}`))
-	const [location, setLocation] = useLocation();
+	const [location, setLocation] = useLocation()
 
 	if (loading) return <div className="fw6 fs5">Loading...</div>
 	const game = snapshot.val()
@@ -336,6 +347,7 @@ const GamePage = ({ gameId, playerId }) => {
 	)
 }
 
+// Question Page
 const QuestionPage = ({ gameId, playerId }) => {
 	const [snapshot, loading, error] = useObject(ref(db, `games/${gameId}`))
 
@@ -358,10 +370,12 @@ const QuestionPage = ({ gameId, playerId }) => {
 			if (countryCode == question.correct) {
 				updates[`/games/${gameId}/score/${youKey}`] = game.score[youKey] + 1
 			}
+
 			else {
 				updates[`/games/${gameId}/score/${youKey}`] = game.score[youKey] - 1
 			}
 		}
+
 		else {
 			if (countryCode == question.correct) {
 				updates[`/games/${gameId}/score/${youKey}`] = game.score[youKey] + 1
@@ -376,6 +390,7 @@ const QuestionPage = ({ gameId, playerId }) => {
 			updates2[`/games/${gameId}/currentQuestion`] = parseInt(game.currentQuestion) + 1
 			await update(ref(db), updates2)
 		}
+
 		else {
 			await utils.sleep(3000)
 			const updates2 = {}
@@ -417,6 +432,7 @@ const QuestionPage = ({ gameId, playerId }) => {
 	)
 }
 
+// QuickResults
 const QuickResults = ({ you, opponent }) => {
 	return (
 		<div className="quick-results">
@@ -425,6 +441,7 @@ const QuickResults = ({ you, opponent }) => {
 	)
 }
 
+// Results Page
 const ResultsPage = ({ gameId, playerId }) => {
 	const [snapshot, loading, error] = useObject(ref(db, `games/${gameId}`))
 
@@ -434,10 +451,13 @@ const ResultsPage = ({ gameId, playerId }) => {
 	const youKey = `player${playerId}`
 	const opponentKey = `player${parseInt(playerId) === 1 ? 2 : 1}`
 
+	// Added win state.
 	const youWon = (game.score[youKey] > game.score[opponentKey])
-	//Add tie state
+
+	// Added tie state.
 	const itsATie = (game.score[youKey] == game.score[opponentKey])
-	//Add lose state
+
+	// Added lose state.
 	const youLost = (game.score[youKey] < game.score[opponentKey])
 
 	if (JSON.parse(localStorage.getItem("featureFlags"))[2]["active"] === true) {
@@ -449,7 +469,9 @@ const ResultsPage = ({ gameId, playerId }) => {
 				<Link href="/" className="re-home link">Home</Link>
 			</div>
 		)
-	} else {
+	}
+	
+	else {
 		return (
 		<div className="page">
 			{youWon && <Won you={game.score[youKey]} opponent={game.score[opponentKey]} />}
@@ -457,12 +479,11 @@ const ResultsPage = ({ gameId, playerId }) => {
 			{itsATie && !youWon && <Won you={game.score[youKey]} opponent={game.score[opponentKey]} />}
 			<Link href="/" className="re-home link">Home</Link>
 		</div>
-	)
-		}
-
-	
+		)
+	}
 }
 
+// Win screen.
 const Won = ({ you, opponent }) => {
 	return (
 		<div className="results">
@@ -473,17 +494,18 @@ const Won = ({ you, opponent }) => {
 	)
 }
 
+// Loss screen.
 const Lost = ({ you, opponent }) => {
 	return (
 		<div className="results">
 			<img src={dog} style={{ width: '80%' }} />
-			<div className="re-text">Better luck next time...</div>
+			<div className="re-text">Better luck next time..</div>
 			<QuickResults you={you} opponent={opponent} />
 		</div>
 	)
 }
 
-//Added tie var
+// Added tie screen.
 const Tie = ({ you, opponent }) => {
 	return (
 		<div className="results">
@@ -494,4 +516,4 @@ const Tie = ({ you, opponent }) => {
 	)
 }
 
-export default App;
+export default App
