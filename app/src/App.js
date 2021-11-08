@@ -1,12 +1,13 @@
 import React from 'react'
 import * as R from 'ramda'
-import {Link, Route, useLocation} from "wouter"
+import { Link, Route, useLocation } from "wouter"
 import { customAlphabet } from 'nanoid'
 import './App.css'
 import * as utils from './utils'
 import countries from './countries'
 import winning from '../assets/winning.png'
 import dog from '../assets/dog.png'
+import draw from '../assets/draw.jpg'
 
 // Import the functions you need from the SDKs you need
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -21,13 +22,13 @@ const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvxyz', 5)
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBzcyHqbezZz4SN4YQTnOAbrCcgkSOCaNw",
-  authDomain: "learn-country-quiz-f159d.firebaseapp.com",
-  databaseURL: "https://learn-country-quiz-f159d-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "learn-country-quiz-f159d",
-  storageBucket: "learn-country-quiz-f159d.appspot.com",
-  messagingSenderId: "76349734788",
-  appId: "1:76349734788:web:ebcbd6f5590e94d853e7d1"
+	apiKey: "AIzaSyBzcyHqbezZz4SN4YQTnOAbrCcgkSOCaNw",
+	authDomain: "learn-country-quiz-f159d.firebaseapp.com",
+	databaseURL: "https://learn-country-quiz-f159d-default-rtdb.europe-west1.firebasedatabase.app",
+	projectId: "learn-country-quiz-f159d",
+	storageBucket: "learn-country-quiz-f159d.appspot.com",
+	messagingSenderId: "76349734788",
+	appId: "1:76349734788:web:ebcbd6f5590e94d853e7d1"
 };
 
 // Initialize Firebase
@@ -90,7 +91,7 @@ const StartPage = () => {
 	if (JSON.parse(localStorage.getItem("featureFlags"))[1]["active"] === true) {
 		const country = {}
 		for (const property in countries) {
-				country[countries[property]] = property.toLowerCase()
+			country[countries[property]] = property.toLowerCase()
 		}
 
 		const flags = []
@@ -185,7 +186,7 @@ const StartPage = () => {
 			</div>
 		)
 	}
-	
+
 	else {
 		return (
 			<div className="page">
@@ -217,7 +218,7 @@ const StartPage = () => {
 }
 
 
-const GamePage = ({gameId, playerId}) => {
+const GamePage = ({ gameId, playerId }) => {
 	const [snapshot, loading, error] = useObject(ref(db, `games/${gameId}`))
 	const [location, setLocation] = useLocation();
 
@@ -230,22 +231,22 @@ const GamePage = ({gameId, playerId}) => {
 		await update(ref(db), updates)
 		setLocation(`/`)
 	}
-	
+
 	if (game && game.status === 'playing') return <QuestionPage gameId={gameId} playerId={playerId} />
 	if (game && game.status === 'finished') return <ResultsPage gameId={gameId} playerId={playerId} />
-	
+
 	return (
 		<div className="page">
 			<div className="fw6 fs9 tac">
 				{!game && 'Waiting for opponent...'}
 				{game && game.status === 'starting' && 'Starting game... Get READY!'}
 			</div>
-			{!game && <div className="link" style={{marginTop: '10rem'}} onClick={cancel}>Cancel</div>}
+			{!game && <div className="link" style={{ marginTop: '10rem' }} onClick={cancel}>Cancel</div>}
 		</div>
 	)
 }
 
-const QuestionPage = ({gameId, playerId}) => {
+const QuestionPage = ({ gameId, playerId }) => {
 	const [snapshot, loading, error] = useObject(ref(db, `games/${gameId}`))
 
 	if (loading) return <div className="fw6 fs5">Loading...</div>
@@ -258,11 +259,11 @@ const QuestionPage = ({gameId, playerId}) => {
 
 	if (!question) return 'Loading...'
 
-	const answer = async (countryCode) => {
+	const answer = async (countryCode) => {
 		if (question.fastest) return
 
 		const updates = {}
-		updates[`/games/${gameId}/questions/${game.currentQuestion}/fastest`] = {player: playerId, answer: countryCode}
+		updates[`/games/${gameId}/questions/${game.currentQuestion}/fastest`] = { player: playerId, answer: countryCode }
 		if (JSON.parse(localStorage.getItem("featureFlags"))[0]["active"] === true) {
 			if (countryCode == question.correct) {
 				updates[`/games/${gameId}/score/${youKey}`] = game.score[youKey] + 1
@@ -276,7 +277,7 @@ const QuestionPage = ({gameId, playerId}) => {
 				updates[`/games/${gameId}/score/${youKey}`] = game.score[youKey] + 1
 			}
 		}
-		
+
 		await update(ref(db), updates)
 
 		if (game.currentQuestion < Object.values(game.questions).length) {
@@ -311,9 +312,9 @@ const QuestionPage = ({gameId, playerId}) => {
 					}
 					return (
 						<div className={`button alt ${correct && 'alt-green'} ${correct === false && 'alt-red'}`}
-						key={countryCode} title={countryCode} onClick={() => answer(countryCode)}>
+							key={countryCode} title={countryCode} onClick={() => answer(countryCode)}>
 							{countries[countryCode.toUpperCase()]}
-							{}
+							{ }
 							{youOrOpponent && <div className="alt-label">{youOrOpponent}</div>}
 						</div>)
 				})}
@@ -326,7 +327,7 @@ const QuestionPage = ({gameId, playerId}) => {
 	)
 }
 
-const QuickResults = ({you, opponent}) => {
+const QuickResults = ({ you, opponent }) => {
 	return (
 		<div className="quick-results">
 			YOU {you} : OPPONENT {opponent}
@@ -334,7 +335,7 @@ const QuickResults = ({you, opponent}) => {
 	)
 }
 
-const ResultsPage = ({gameId, playerId}) => {
+const ResultsPage = ({ gameId, playerId }) => {
 	const [snapshot, loading, error] = useObject(ref(db, `games/${gameId}`))
 
 	if (loading) return <div className="fw6 fs5">Loading...</div>
@@ -343,32 +344,61 @@ const ResultsPage = ({gameId, playerId}) => {
 	const youKey = `player${playerId}`
 	const opponentKey = `player${parseInt(playerId) === 1 ? 2 : 1}`
 
-	const youWon = (game.score[youKey] >= game.score[opponentKey])
+	const youWon = (game.score[youKey] > game.score[opponentKey])
+	//Add tie state
+	const itsATie = (game.score[youKey] == game.score[opponentKey])
+	//Add lose state
+	const youLost = (game.score[youKey] < game.score[opponentKey])
 
-	return (
+	if (JSON.parse(localStorage.getItem("featureFlags"))[2]["active"] === true) {
+		return (
+			<div className="page">
+				{youWon && <Won you={game.score[youKey]} opponent={game.score[opponentKey]} />}
+				{youLost && <Lost you={game.score[youKey]} opponent={game.score[opponentKey]} />}
+				{itsATie && !youWon && <Tie you={game.score[youKey]} opponent={game.score[opponentKey]} />}
+				<Link href="/" className="re-home link">Home</Link>
+			</div>
+		)
+	} else {
+		return (
 		<div className="page">
 			{youWon && <Won you={game.score[youKey]} opponent={game.score[opponentKey]} />}
-			{!youWon && <Lost you={game.score[youKey]} opponent={game.score[opponentKey]} />}
+			{youLost && <Lost you={game.score[youKey]} opponent={game.score[opponentKey]} />}
+			{itsATie && !youWon && <Won you={game.score[youKey]} opponent={game.score[opponentKey]} />}
 			<Link href="/" className="re-home link">Home</Link>
 		</div>
 	)
+		}
+
+	
 }
 
-const Won = ({you, opponent}) => {
+const Won = ({ you, opponent }) => {
 	return (
 		<div className="results">
-			<img src={winning} style={{width: '80%'}} />
+			<img src={winning} style={{ width: '80%' }} />
 			<div className="re-text">Congratulations!!</div>
 			<QuickResults you={you} opponent={opponent} />
 		</div>
 	)
 }
 
-const Lost = ({you, opponent}) => {
+const Lost = ({ you, opponent }) => {
 	return (
 		<div className="results">
-			<img src={dog} style={{width: '80%'}} />
+			<img src={dog} style={{ width: '80%' }} />
 			<div className="re-text">Better luck next time...</div>
+			<QuickResults you={you} opponent={opponent} />
+		</div>
+	)
+}
+
+//Added tie var
+const Tie = ({ you, opponent }) => {
+	return (
+		<div className="results">
+			<img src={draw} style={{ width: '80%' }} />
+			<div className="re-text">It's a draw!</div>
 			<QuickResults you={you} opponent={opponent} />
 		</div>
 	)
