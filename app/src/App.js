@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import * as R from 'ramda'
 import { Link, Route, useLocation } from "wouter"
 import { customAlphabet } from 'nanoid'
@@ -16,6 +16,7 @@ import { getAnalytics } from "firebase/analytics"
 import { ref, getDatabase, set, update } from "firebase/database"
 import { useObject } from 'react-firebase-hooks/database'
 import initFeatures from "./featureFlags"
+
 
 
 const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvxyz', 5)
@@ -50,11 +51,100 @@ function App() {
 						return <GamePage gameId={params.gameId} playerId={params.playerId} />
 					}}
 				</Route>
+				<Route path="/setup">
+					<SetupPage />
+				</Route>
+					
 			</div>
 			<div className="footer"></div>
 		</div>
 	);
 }
+
+// setup page
+const SetupPage = () => {
+	
+	const [featureFlags, setfeatureFlags]  = useLocalStorage("featureFlags", [])
+	console.log(featureFlags)
+	function toggleScore(){
+		const newFeatureFlags = [...featureFlags]
+		console.log(newFeatureFlags)
+		newFeatureFlags[0].active = true
+		setfeatureFlags(newFeatureFlags)
+	}
+
+	function toggleRandom(){
+		const newFeatureFlags = [...featureFlags]
+		console.log(newFeatureFlags)
+		newFeatureFlags[1].active = true
+		setfeatureFlags(newFeatureFlags)
+	}
+
+	function toggleTie(){
+		const newFeatureFlags = [...featureFlags]
+		console.log(newFeatureFlags)
+		newFeatureFlags[2].active = true
+		setfeatureFlags(newFeatureFlags)
+	}
+
+
+
+	return (
+		<div className="page">
+			<button onClick={toggleScore} type="button" className="ffbutton">Improved Scoring  </button>
+			{JSON.stringify(featureFlags[0].active)}
+				
+			<button onClick={toggleRandom} type="button" className="ffbutton">Randomizer</button>
+			 {JSON.stringify(featureFlags[1].active)}
+
+			<button onClick={toggleTie} type="button" className="ffbutton">Tie Screen</button>
+			 {JSON.stringify(featureFlags[2].active)}
+
+			<Link href="/" className="re-home link">Go to App</Link>
+		</div>
+	)
+
+}
+
+
+// Hook
+function useLocalStorage(key, initialValue) {
+	// State to store our value
+	// Pass initial state function to useState so logic is only executed once
+	const [storedValue, setStoredValue] = useState(() => {
+	  try {
+		// Get from local storage by key
+		const item = window.localStorage.getItem(key);
+		// Parse stored json or if none return initialValue
+		return item ? JSON.parse(item) : initialValue;
+	  } catch (error) {
+		// If error also return initialValue
+		console.log(error);
+		return initialValue;
+	  }
+	});
+	// Return a wrapped version of useState's setter function that ...
+	// ... persists the new value to localStorage.
+	const setValue = (value) => {
+	  try {
+		// Allow value to be a function so we have same API as useState
+		const valueToStore =
+		  value instanceof Function ? value(storedValue) : value;
+		// Save state
+		setStoredValue(valueToStore);
+		// Save to local storage
+		window.localStorage.setItem(key, JSON.stringify(valueToStore));
+	  } catch (error) {
+		// A more advanced implementation would handle the error case
+		console.log(error);
+	  }
+	};
+	return [storedValue, setValue];
+  }
+
+
+
+
 
 
 const StartPage = () => {
