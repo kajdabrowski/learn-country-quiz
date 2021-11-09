@@ -22,47 +22,37 @@ const hardCodedQuestions = {
 };
 
 //import and randomize 5 questions as an object from countries.js everytime a new game is started
-const getQuestions = () => {
+const getQuestions = (numQuestions) => {
   const questions = {};
   const keys = Object.keys(countries);
   const randomKeys = keys.sort(() => 0.5 - Math.random());
-  for (let i = 0; i < 1; i++) {
+  console.log(randomKeys)
+  for (let i = 0; i < numQuestions; i++) {
     questions[i + 1] = {
-		
       alternatives: {
-        1: randomKeys[i].toLowerCase(),
-        2: randomKeys[i + 1].toLowerCase(),
-        3: randomKeys[i + 2].toLowerCase(),
-        4: randomKeys[i + 3].toLowerCase(),
+        1: randomKeys[i * 4].toLowerCase(),
+        2: randomKeys[i * 4 + 1].toLowerCase(),
+        3: randomKeys[i * 4 + 2].toLowerCase(),
+        4: randomKeys[i * 4 + 3].toLowerCase(),
       },
-      correct: randomKeys[i + 3].toLowerCase(),
-	  
+      correct: randomKeys[i * 4 + Math.floor(Math.random() * 4)].toLowerCase(),
     };
-	
   }
-  
+
   return questions;
 };
-getQuestions()
-
-
-
-
-
-
-
-
-
+console.log(getQuestions(5));
 
 
 
 export const createGame = () => {
+  const ffImprovedQuestions =
+    JSON.parse(localStorage.getItem("featureFlags"))[3]["active"] === true;
 
-	const ffImprovedQuestions = JSON.parse(localStorage.getItem("featureFlags"))[3]["active"] === true
-
- 
-	const generatedQuestions = ffImprovedQuestions ? getQuestions() : hardCodedQuestions
-  	return {
+  const generatedQuestions = ffImprovedQuestions
+    ? getQuestions()
+    : hardCodedQuestions;
+  return {
     currentQuestion: 1,
     questions: generatedQuestions,
     score: { player1: 0, player2: 0 },

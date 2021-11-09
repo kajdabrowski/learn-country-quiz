@@ -188,6 +188,7 @@ const StartPage = () => {
 
 		else {
 			const game = utils.createGame()
+			console.log(1,game)
 			const updates = {}
 			updates['/nextGame'] = null
 			updates[`/games/${nextGame}`] = game
@@ -368,7 +369,7 @@ const QuestionPage = ({ gameId, playerId }) => {
 
 	const youKey = `player${playerId}`
 	const opponentKey = `player${parseInt(playerId) === 1 ? 2 : 1}`
-
+	console.log(game)
 	const question = game.questions[`${game.currentQuestion}`]
 
 	if (!question) return 'Loading...'
