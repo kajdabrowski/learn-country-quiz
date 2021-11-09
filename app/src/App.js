@@ -80,6 +80,11 @@ const SetupPage = () => {
 		newFeatureFlags[2].active = !newFeatureFlags[2].active
 		setfeatureFlags(newFeatureFlags)
 	}
+	function toggleImprovedQuestions(){
+		const newFeatureFlags = [...featureFlags]
+		newFeatureFlags[3].active = !newFeatureFlags[3].active
+		setfeatureFlags(newFeatureFlags)
+	}
 
 	return (
 		<div className="page">
@@ -104,6 +109,13 @@ const SetupPage = () => {
 				<center>
 					<button onClick={toggleTie} type="button" className="ffbutton">Toggle Improved Ties</button>
 					<p>Status: {JSON.stringify(featureFlags[2].active)}</p>
+				</center>
+			</div>
+
+			<div>
+				<center>
+					<button onClick={toggleImprovedQuestions} type="button" className="ffbutton">Toggle Improved Questions</button>
+					<p>Status: {JSON.stringify(featureFlags[3].active)}</p>
 				</center>
 			</div>
 
