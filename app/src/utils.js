@@ -22,11 +22,11 @@ const hardCodedQuestions = {
 };
 
 //import and randomize 5 questions as an object from countries.js everytime a new game is started
-const getQuestions = (numQuestions) => {
+export const getQuestions = (numQuestions) => {
   const questions = {};
   const keys = Object.keys(countries);
   const randomKeys = keys.sort(() => 0.5 - Math.random());
-  console.log(randomKeys)
+  // console.log(randomKeys)
   for (let i = 0; i < numQuestions; i++) {
     questions[i + 1] = {
       alternatives: {
@@ -41,7 +41,7 @@ const getQuestions = (numQuestions) => {
 
   return questions;
 };
-console.log(getQuestions(5));
+// console.log(getQuestions(5));
 
 
 
@@ -50,7 +50,7 @@ export const createGame = () => {
     JSON.parse(localStorage.getItem("featureFlags"))[3]["active"] === true;
 
   const generatedQuestions = ffImprovedQuestions
-    ? getQuestions()
+    ? getQuestions(5) 
     : hardCodedQuestions;
   return {
     currentQuestion: 1,
