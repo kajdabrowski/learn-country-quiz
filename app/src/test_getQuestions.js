@@ -28,16 +28,20 @@ describe('getQuestions', () => {
         let questionCopy = Object.values(questionObj)
         questionsArr = [...questionCopy]
         questionsArr[0][0]
-        let correctArr = [];
+        let alternativesArr = [];
         for (let q of questionsArr) {
-            assert.equal(correctArr.includes(q.alternatives), false)
-            correctArr.push(q.alternatives)
+            // assert.equal(alternativesArr.includes(q.alternatives), false)
+            alternativesArr.push(q.alternatives)
         }
-        let countryArr = []
-        for(let country of correctArr) {
-            countryArr.push(country)
-            assert.equal(countryArr.includes(country.alternatives), false)
+        for(let country of alternativesArr) {
+            let countryValues = Object.values(country);
+            let checkedValues = checkIfDuplicateExists(countryValues)
+            assert.equal(checkedValues, false)
         }      
-        console.log(countryArr);
+        
     })
 })
+
+function checkIfDuplicateExists(arr) {
+    return new Set(arr).size !== arr.length
+}
