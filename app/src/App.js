@@ -17,6 +17,8 @@ import { ref, getDatabase, set, update } from "firebase/database"
 import { useObject } from 'react-firebase-hooks/database'
 import initFeatures from "./featureFlags"
 
+import initGdpr from "./gdpr"
+
 const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvxyz', 5)
 
 // Your web app's Firebase configuration
@@ -35,6 +37,8 @@ const app = initializeApp(firebaseConfig)
 const analytics = getAnalytics(app)
 const db = getDatabase(app)
 
+initGdpr()
+
 function App() {
 	initFeatures()
 	return (
@@ -42,7 +46,7 @@ function App() {
 			<div className="header">THE FLAG GAME</div>
 			<div className="middle">
 				<Route path="/">
-					<StartPage />
+					{userGdprConsent ? <StartPage /> : <GDPRPage />}
 				</Route>
 				<Route path="/game/:gameId/:playerId">
 					{(params) => {
@@ -52,35 +56,88 @@ function App() {
 				<Route path="/setup">
 					<SetupPage />
 				</Route>
-					
+
 			</div>
 			<div className="footer"></div>
 		</div>
 	)
 }
 
+const userGdprConsent = JSON.parse(localStorage.getItem("gdprConsent"))[0]["active"] === true;
+
+const GDPRPage = () => {
+	const [gdprConsent, setgdprConsent] = useLocalStorage("gdprConsent", [])
+
+	function toggleMarketing() {
+		const newgdprConsent = [...gdprConsent]
+		gdprConsent[0].active = !gdprConsent[0].active
+		setgdprConsent(newgdprConsent)
+	}
+
+	function toggleNecessary() {
+		const newgdprConsent = [...gdprConsent]
+		gdprConsent[1].active = !gdprConsent[1].active
+		setgdprConsent(newgdprConsent)
+	}
+
+	function toggleStatistics() {
+		const newgdprConsent = [...gdprConsent]
+		gdprConsent[2].active = !gdprConsent[2].active
+		setgdprConsent(newgdprConsent)
+	}
+
+	// initGdpr()
+	return (
+		<div className="gdpr__page">
+			<h1>We use cookies and store your information in accordance with GDPR regulations</h1>
+			<div className="gdpr__marketing">
+				<p>Persistent third-party cookies that help advertisers deliver targeted ads. </p>
+				<button onClick={toggleMarketing}>Marketing</button>
+				<p>I consent: {JSON.stringify(gdprConsent[0].active)}</p>
+			</div>
+			<div className="gdpr__necessary">
+				<p>Strictly necessary cookies are needed for site functionality.</p>
+				<button onClick={toggleNecessary}>Necessary</button>
+				<p>I consent: {JSON.stringify(gdprConsent[1].active)}</p>
+			</div>
+			<div className="gdpr__statistics">
+				<p>Information about site visits and user behavior. This information is anonymized.</p>
+				<button onClick={toggleStatistics}>Statistics</button>
+				<p>I consent: {JSON.stringify(gdprConsent[2].active)}</p>
+			</div>
+		</div>
+	)
+}
+
+//TODO
+//Använd useLocalStorage funktionen/hooken för att lagra användarens consent. DONE
+//Skapa ett gdpr-consent objekt som ser ut som feature flags objektet. DONE
+//Hantera användarens consent i GDPRPage komponenten på samma sätt som featureFlags hanteras i SetupPage komponenten. DONE
+//!Fixa routing bruuuuurs
+
+
 // Setup Page
 const SetupPage = () => {
-	const [featureFlags, setfeatureFlags]  = useLocalStorage("featureFlags", [])
+	const [featureFlags, setfeatureFlags] = useLocalStorage("featureFlags", [])
 
-	function toggleScore(){
+	function toggleScore() {
 		const newFeatureFlags = [...featureFlags]
 		newFeatureFlags[0].active = !newFeatureFlags[0].active
 		setfeatureFlags(newFeatureFlags)
 	}
 
-	function toggleRandom(){
+	function toggleRandom() {
 		const newFeatureFlags = [...featureFlags]
 		newFeatureFlags[1].active = !newFeatureFlags[1].active
 		setfeatureFlags(newFeatureFlags)
 	}
 
-	function toggleTie(){
+	function toggleTie() {
 		const newFeatureFlags = [...featureFlags]
 		newFeatureFlags[2].active = !newFeatureFlags[2].active
 		setfeatureFlags(newFeatureFlags)
 	}
-	function toggleImprovedQuestions(){
+	function toggleImprovedQuestions() {
 		const newFeatureFlags = [...featureFlags]
 		newFeatureFlags[3].active = !newFeatureFlags[3].active
 		setfeatureFlags(newFeatureFlags)
@@ -89,7 +146,7 @@ const SetupPage = () => {
 	return (
 		<div className="page">
 			<center><h3>Feature Flags Settings
-			<br></br>Please take caution when using these experimental features</h3></center>
+				<br></br>Please take caution when using these experimental features</h3></center>
 
 			<div>
 				<center>
@@ -130,39 +187,39 @@ function useLocalStorage(key, initialValue) {
 	// State to store our value
 	// Pass initial state function to useState so logic is only executed once
 	const [storedValue, setStoredValue] = useState(() => {
-	try {
-		// Get from local storage by key
-		const item = window.localStorage.getItem(key)
+		try {
+			// Get from local storage by key
+			const item = window.localStorage.getItem(key)
 
-		// Parse stored json or if none return initialValue
-		return item ? JSON.parse(item) : initialValue
-	}
+			// Parse stored json or if none return initialValue
+			return item ? JSON.parse(item) : initialValue
+		}
 
-	catch (error) {
-		// If error also return initialValue
-		console.log(error)
-		return initialValue
-	}
-})
+		catch (error) {
+			// If error also return initialValue
+			console.log(error)
+			return initialValue
+		}
+	})
 
 	// Return a wrapped version of useState's setter function that ...
 	// ... persists the new value to localStorage.
 	const setValue = (value) => {
-	try {
-		// Allow value to be a function so we have same API as useState
-		const valueToStore = value instanceof Function ? value(storedValue) : value
+		try {
+			// Allow value to be a function so we have same API as useState
+			const valueToStore = value instanceof Function ? value(storedValue) : value
 
-		// Save state
-		setStoredValue(valueToStore)
+			// Save state
+			setStoredValue(valueToStore)
 
-		// Save to local storage
-		window.localStorage.setItem(key, JSON.stringify(valueToStore))
-	  }
-	  
-	catch (error) {
-		// A more advanced implementation would handle the error case
-		console.log(error)
-	  }
+			// Save to local storage
+			window.localStorage.setItem(key, JSON.stringify(valueToStore))
+		}
+
+		catch (error) {
+			// A more advanced implementation would handle the error case
+			console.log(error)
+		}
 	}
 
 	return [storedValue, setValue]
@@ -188,7 +245,7 @@ const StartPage = () => {
 
 		else {
 			const game = utils.createGame()
-			console.log(1,game)
+			console.log(1, game)
 			const updates = {}
 			updates['/nextGame'] = null
 			updates[`/games/${nextGame}`] = game
@@ -483,15 +540,15 @@ const ResultsPage = ({ gameId, playerId }) => {
 			</div>
 		)
 	}
-	
+
 	else {
 		return (
-		<div className="page">
-			{youWon && <Won you={game.score[youKey]} opponent={game.score[opponentKey]} />}
-			{youLost && <Lost you={game.score[youKey]} opponent={game.score[opponentKey]} />}
-			{itsATie && !youWon && <Won you={game.score[youKey]} opponent={game.score[opponentKey]} />}
-			<Link href="/" className="re-home link">Home</Link>
-		</div>
+			<div className="page">
+				{youWon && <Won you={game.score[youKey]} opponent={game.score[opponentKey]} />}
+				{youLost && <Lost you={game.score[youKey]} opponent={game.score[opponentKey]} />}
+				{itsATie && !youWon && <Won you={game.score[youKey]} opponent={game.score[opponentKey]} />}
+				<Link href="/" className="re-home link">Home</Link>
+			</div>
 		)
 	}
 }
