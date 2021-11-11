@@ -63,7 +63,7 @@ function App() {
 	)
 }
 
-const userGdprConsent = JSON.parse(localStorage.getItem("gdprConsent"))[0]["active"] === true;
+const userGdprConsent = JSON.parse(localStorage.getItem("gdprConsent"))[0]["active"] === true
 
 const GDPRPage = () => {
 	const [gdprConsent, setgdprConsent] = useLocalStorage("gdprConsent", [])
@@ -86,7 +86,6 @@ const GDPRPage = () => {
 		setgdprConsent(newgdprConsent)
 	}
 
-	// initGdpr()
 	return (
 		<div className="gdpr__page">
 			<h1>We use cookies and store your information in accordance with GDPR regulations</h1>
