@@ -64,7 +64,7 @@ function App() {
 	)
 }
 
-const userGdprConsent = JSON.parse(localStorage.getItem("gdprConsent"))[0]["active"] === true;
+const userGdprConsent = JSON.parse(localStorage.getItem("gdprConsent"))[0]["active"] === true
 
 const GDPRPage = () => {
 	const [gdprConsent, setgdprConsent] = useLocalStorage("gdprConsent", [])
@@ -86,11 +86,15 @@ const GDPRPage = () => {
 		gdprConsent[2].active = !gdprConsent[2].active
 		setgdprConsent(newgdprConsent)
 	}
+<<<<<<< HEAD
 	function refreshPage() {
 		analytics.log("refresh")
 		window.location.reload(false);
 	}
 	// initGdpr()
+=======
+
+>>>>>>> c2c7caf7af31921827dc297644d90b78a8e5f2e0
 	return (
 		<div className="gdpr__page">
 			<h1>We use cookies and store your information in accordance with GDPR regulations</h1>

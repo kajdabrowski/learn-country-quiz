@@ -1,5 +1,5 @@
-import React from "react";
-import './popup.css';
+import React from "react"
+import './popup.css'
  
 const Popup = props => {
   return (
@@ -9,7 +9,7 @@ const Popup = props => {
         {props.content}
       </div>
     </div>
-  );
-};
+  )
+}
  
-export default Popup;
+export default Popup
