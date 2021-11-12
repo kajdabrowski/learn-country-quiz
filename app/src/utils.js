@@ -47,7 +47,7 @@ export const createGame = () => {
     JSON.parse(localStorage.getItem("featureFlags"))[3]["active"] === true
 
   const generatedQuestions = ffImprovedQuestions
-    ? getQuestions(5) 
+    ? getQuestions(4) 
     : hardCodedQuestions
   return {
     currentQuestion: 1,

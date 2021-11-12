@@ -1,3 +1,8 @@
+
+// import ReactGA from 'react-ga';
+// ReactGA.initialize('UA-000000-01');
+// ReactGA.pageview(window.location.pathname + window.location.search);
+
 import React, { useState } from 'react'
 import * as R from 'ramda'
 import { Link, Route, useLocation } from "wouter"
@@ -12,7 +17,7 @@ import draw from '../assets/draw.jpg'
 // Import the functions you need from the SDKs you need
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { initializeApp } from "firebase/app"
-import { getAnalytics } from "firebase/analytics"
+import { getAnalytics, logEvent } from "firebase/analytics"
 import { ref, getDatabase, set, update } from "firebase/database"
 import { useObject } from 'react-firebase-hooks/database'
 import initFeatures from "./featureFlags"
@@ -64,37 +69,37 @@ function App() {
 	)
 }
 
-const userGdprConsent = JSON.parse(localStorage.getItem("gdprConsent"))[0]["active"] === true
+const userGdprConsent = JSON.parse(localStorage.getItem("gdprConsent"))[0]["active"] === true;
 
 const GDPRPage = () => {
 	const [gdprConsent, setgdprConsent] = useLocalStorage("gdprConsent", [])
 
 	function toggleMarketing() {
+		logEvent(analytics, "marketing checkbox")
+		console.log("marketing")
 		const newgdprConsent = [...gdprConsent]
 		gdprConsent[0].active = !gdprConsent[0].active
 		setgdprConsent(newgdprConsent)
 	}
 
 	function toggleNecessary() {
+		logEvent(analytics, "necessary checkbox")
 		const newgdprConsent = [...gdprConsent]
 		gdprConsent[1].active = !gdprConsent[1].active
 		setgdprConsent(newgdprConsent)
 	}
 
 	function toggleStatistics() {
+		logEvent(analytics, "statistics checkbox")
 		const newgdprConsent = [...gdprConsent]
 		gdprConsent[2].active = !gdprConsent[2].active
 		setgdprConsent(newgdprConsent)
 	}
-<<<<<<< HEAD
 	function refreshPage() {
-		analytics.log("refresh")
+		
 		window.location.reload(false);
 	}
 	// initGdpr()
-=======
-
->>>>>>> c2c7caf7af31921827dc297644d90b78a8e5f2e0
 	return (
 		<div className="gdpr__page">
 			<h1>We use cookies and store your information in accordance with GDPR regulations</h1>
@@ -604,5 +609,11 @@ const Tie = ({ you, opponent }) => {
 		</div>
 	)
 }
+
+
+
+
+
+
 
 export default App
