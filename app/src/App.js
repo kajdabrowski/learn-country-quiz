@@ -24,12 +24,13 @@ const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvxyz', 5)
 // Your web app's Firebase configuration
 const firebaseConfig = {
 	apiKey: "AIzaSyBzcyHqbezZz4SN4YQTnOAbrCcgkSOCaNw",
-	authDomain: "learn-country-quiz-f159d.firebaseapp.com",
-	databaseURL: "https://learn-country-quiz-f159d-default-rtdb.europe-west1.firebasedatabase.app",
-	projectId: "learn-country-quiz-f159d",
-	storageBucket: "learn-country-quiz-f159d.appspot.com",
-	messagingSenderId: "76349734788",
-	appId: "1:76349734788:web:ebcbd6f5590e94d853e7d1"
+  authDomain: "learn-country-quiz-f159d.firebaseapp.com",
+  databaseURL: "https://learn-country-quiz-f159d-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "learn-country-quiz-f159d",
+  storageBucket: "learn-country-quiz-f159d.appspot.com",
+  messagingSenderId: "76349734788",
+  appId: "1:76349734788:web:ebcbd6f5590e94d853e7d1",
+  measurementId: "G-1PJPCKEWJS"
 }
 
 // Initialize Firebase
@@ -85,18 +86,24 @@ const GDPRPage = () => {
 		gdprConsent[2].active = !gdprConsent[2].active
 		setgdprConsent(newgdprConsent)
 	}
-
+	function refreshPage() {
+		analytics.log("refresh")
+		window.location.reload(false);
+	}
 	// initGdpr()
 	return (
 		<div className="gdpr__page">
 			<h1>We use cookies and store your information in accordance with GDPR regulations</h1>
+			<p><strong> Before playing the game, you must agree to the following terms :</strong> </p>
 			<div className="gdpr__marketing">
+				
 				<p>Persistent third-party cookies that help advertisers deliver targeted ads. </p>
 				<button onClick={toggleMarketing}>Marketing</button>
 				<p>I consent: {JSON.stringify(gdprConsent[0].active)}</p>
 			</div>
 			<div className="gdpr__necessary">
 				<p>Strictly necessary cookies are needed for site functionality.</p>
+				<p>Your data is shared with the following companies: Google Analytics</p>
 				<button onClick={toggleNecessary}>Necessary</button>
 				<p>I consent: {JSON.stringify(gdprConsent[1].active)}</p>
 			</div>
@@ -105,6 +112,10 @@ const GDPRPage = () => {
 				<button onClick={toggleStatistics}>Statistics</button>
 				<p>I consent: {JSON.stringify(gdprConsent[2].active)}</p>
 			</div>
+			<div>
+				<button onClick={refreshPage}>I concent and want to continue</button>
+				
+				</div>
 		</div>
 	)
 }
@@ -118,6 +129,7 @@ const GDPRPage = () => {
 
 // Setup Page
 const SetupPage = () => {
+	
 	const [featureFlags, setfeatureFlags] = useLocalStorage("featureFlags", [])
 
 	function toggleScore() {
@@ -184,6 +196,7 @@ const SetupPage = () => {
 
 // Hooks
 function useLocalStorage(key, initialValue) {
+	
 	// State to store our value
 	// Pass initial state function to useState so logic is only executed once
 	const [storedValue, setStoredValue] = useState(() => {
@@ -228,6 +241,7 @@ function useLocalStorage(key, initialValue) {
 
 // Start Page
 const StartPage = () => {
+	
 	const [snapshot, loading, error] = useObject(ref(db, 'nextGame'))
 	const [location, setLocation] = useLocation()
 
@@ -235,6 +249,7 @@ const StartPage = () => {
 	const nextGame = snapshot.val()
 
 	const play = async () => {
+		   
 		if (R.isNil(nextGame)) {
 			const updates = {}
 			const gameId = nanoid()
